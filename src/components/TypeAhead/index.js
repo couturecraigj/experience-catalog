@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import Search from "./Search";
-import DropDown from "./DropDown";
-import FormContext from "./Form/Context";
-import AdditionalFieldsContext from "./AdditionalFields/Context";
+import Search from "../Search";
+import DropDown from "../DropDown";
+import FormContext from "../Form/Context";
+import AdditionalFieldsContext from "../AdditionalFields/Context";
 
 const TypeAhead = ({
   value: Id,
