@@ -27,13 +27,7 @@ const DropDown = (
       onBlur={() => (ref.current.mouseOver = false)}
     >
       {list.map(item => (
-        <a
-          href="#clickItem"
-          style={{
-            display: "block",
-            color: "#222",
-            backgroundColor: currentHover === item.Id ? "#ccc" : ""
-          }}
+        <li
           onMouseOver={() => {
             setCurrentHover(item.Id);
             onHover(item.Id);
@@ -49,7 +43,7 @@ const DropDown = (
           }}
         >
           {itemLabelField(item)}
-        </a>
+        </li>
       ))}
     </ul>
   );
