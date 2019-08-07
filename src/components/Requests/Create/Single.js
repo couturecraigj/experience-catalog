@@ -8,30 +8,38 @@ import InputField from "../../Form/InputField";
 import TypeAhead from "../../TypeAhead";
 import SingleDatePickerWrapper from "../../SingleDatePickerWrapper";
 import "../../../scss/form.scss";
+import { onContactChange, onSubmit } from "./actionCreators";
 
-const SingleRequestCreate = ({ initialValues = {} }) => {
-  const [{ user }, dispatch] = useContext(Context);
-  // const contact = contacts.data[contactId];
+const SingleRequestCreate = ({
+  initialValues = {},
+  ExperienceName,
+  StrategicPartnerName,
+  onSuccess = () => {}
+}) => {
+  const [{ user, contacts, contactId }, dispatch] = useContext(Context);
+  const contact = contacts.data[contactId];
 
   console.log("User ", user);
   console.log("Initial Values ", initialValues);
 
   return (
     <Form
-      onSubmit={console.log}
+      onSubmit={(...args) => {
+        dispatch(onSubmit(onSuccess, ...args));
+      }}
       initialValues={{
         ...initialValues,
         // Contact_to_Invite__c: contactId,
-        Requester__c: user.user_id,
+        Requester__c: user.Id,
         Description__c: ""
       }}
     >
       <label htmlFor="requester">Requester</label>
-      <h5 id="requester">{user.display_name}</h5>
+      <h5 id="requester">{user.Name}</h5>
       <label htmlFor="partnerName">Strategic Partner</label>
-      <h5 id="partnerName">{initialValues.StrategicPartnerName}</h5>
-      <label htmlFor="experinceName">Experience</label>
-      <h5 id="experienceName">{initialValues.ExperienceName}</h5>
+      <h5 id="partnerName">{StrategicPartnerName}</h5>
+      <label htmlFor="experienceName">Experience</label>
+      <h5 id="experienceName">{ExperienceName}</h5>
       <label htmlFor="requirements">Requirements</label>
       <p id="requirements">{initialValues.Requirements__c}</p>
       <TypeAhead
@@ -39,17 +47,8 @@ const SingleRequestCreate = ({ initialValues = {} }) => {
         label="Contact"
         sObject="Contact"
         className="exp-typeahead"
-        onChange={record => {
-          dispatch({
-            type: "CONT/data",
-            payload: record
-          });
-          dispatch({
-            type: "CONT/Id",
-            payload: record
-          });
-        }}
-        value=""
+        onChange={record => dispatch(onContactChange(record))}
+        value={contact || ""}
         placeholder="contact to invite"
       />
       <SingleDatePickerWrapper

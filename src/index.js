@@ -8,7 +8,7 @@ import "./scss/cardanimations.scss";
 import OAuth from "forcejs/dist/force.oauth";
 import { BrowserRouter } from "react-router-dom";
 import { hydrate } from "react-dom";
-import App from "./components/App";
+import App from "./components/App/index";
 import jsforce from "./jsforce";
 import {
   getUser,

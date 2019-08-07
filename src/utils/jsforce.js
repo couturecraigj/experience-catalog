@@ -13,7 +13,7 @@ const performQuery = (jsforce, query) => {
   return service.query(query);
 };
 
-const createSObject = (jsforce, objectName, record) =>
+const createSObject = (objectName, record) =>
   new Promise((resolve, reject) => {
     const service = DataService.getInstance();
     service

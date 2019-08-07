@@ -8,7 +8,7 @@ import { onExpClick } from "../actionCreators";
 
 const CreatePartnerRequestButton = ({ history, ...initialValues }) => {
   const [showReqs, setShowReqs] = useState(false);
-  const [{ experiences }, dispatch] = useContext(Context);
+  const [dispatch] = useContext(Context);
   const experienceId = initialValues.initialValues.Experience__c;
   return (
     <>

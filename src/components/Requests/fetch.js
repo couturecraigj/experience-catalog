@@ -54,13 +54,11 @@ export const createOne = (
   onFailure = () => {}
 ) => async (dispatch, getState) => {
   const { jsforce } = getState();
-  console.log(record);
   dispatch({
     type: "REQ/create_init"
   });
   try {
     const newRecord = await createSObject(
-      jsforce,
       "Strategic_Partner_Request__c",
       record
     );
