@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { useState, useEffect, useContext } from "react";
 import { SingleDatePicker } from "react-dates";
+import moment from "moment";
 import FormContext from "./Form/Context";
 import AdditionalFieldsContext from "./AdditionalFields/Context";
 
@@ -17,35 +18,40 @@ const SingleDatePickerWrapper = ({
   value
 }) => {
   const [focused, setFocused] = useState(false);
-  const [date, setDate] = useState(value);
 
   // eslint-disable-next-line no-unused-vars
   let [
     // eslint-disable-next-line no-unused-vars
-    context,
+    contextLocal,
     // eslint-disable-next-line no-unused-vars
     state,
     dispatch,
     dispatchLocal,
     // eslint-disable-next-line no-unused-vars
-    addedFieldsContext,
+    context,
     // eslint-disable-next-line no-unused-vars
-    addedFieldsDispatch
-  ] = [{}, {}, () => {}, () => {}];
+    formData
+  ] = [{}, {}, () => {}, () => {}, {}, {}];
   try {
-    [context, dispatchLocal] = useContext(FormContext);
+    [contextLocal, dispatchLocal, formData] = useContext(FormContext);
     // eslint-disable-next-line no-empty
   } catch (error) {}
   try {
-    [addedFieldsContext, addedFieldsDispatch] = useContext(
-      AdditionalFieldsContext
-    );
+    [context, dispatch] = useContext(AdditionalFieldsContext);
     // eslint-disable-next-line no-empty
   } catch (error) {}
-
+  const [date, setDate] = useState(formData.form.initialValues[name]);
   useEffect(() => {
     dispatchLocal({ type: "FIELD/insert", payload: { name, label } });
     dispatch({ type: "FIELD/insert", payload: { name, label } });
+    dispatchLocal({
+      type: "FIELD/change",
+      payload: { value: date, name }
+    });
+    dispatch({
+      type: "FIELD/change",
+      payload: { value: date, name }
+    });
     return () => {
       dispatchLocal({ type: "FIELD/remove", payload: { name } });
       dispatch({
@@ -64,10 +70,11 @@ const SingleDatePickerWrapper = ({
         openDirection="up"
         id={name}
         placeholder={placeholder}
-        date={date}
+        date={date ? moment(date) : null}
         focused={focused}
         required
         onDateChange={d => {
+          console.log(d);
           setDate(d);
           dispatchLocal({
             type: "FIELD/change",

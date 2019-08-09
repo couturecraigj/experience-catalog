@@ -99,6 +99,7 @@ const Card = ({ sort, experience, expanded = false }) => {
                 }}
                 ExperienceName={experience.Name}
                 StrategicPartnerName={experience.Strategic_Partner__r.Name}
+                onSuccess={() => setModalOpen(false)}
               />
             </Modal>
 

@@ -31,7 +31,8 @@ const SingleRequestCreate = ({
         ...initialValues,
         // Contact_to_Invite__c: contactId,
         Requester__c: user.Id,
-        Description__c: ""
+        Description__c: "",
+        Status__c: "Submitted"
       }}
     >
       <label htmlFor="requester">Requester</label>
@@ -54,7 +55,6 @@ const SingleRequestCreate = ({
       <SingleDatePickerWrapper
         name="Event_Date__c"
         label="Event Date"
-        value={moment(initialValues.Event_Date__c)}
         placeholder="date of requested event"
       />
       {/*
