@@ -2,22 +2,21 @@ import React, { useState, useContext } from "react";
 import { withRouter } from "react-router-dom";
 import Modal from "../../Modal";
 import Context from "../../Context";
-import RequestList from "./List/Bullet";
+import NewEntry from "./NewEntry";
 
-const ExperienceModalButton = ({ history }) => {
+const EntryModalButton = ({ history, experience }) => {
   const [showReqs, setShowReqs] = useState(false);
-  const [{ requests }] = useContext(Context);
   return (
     <>
       <button
         type="button"
         className="info"
         onClick={() => {
-          history.push(`${history.location.pathname}#requests`);
+          history.push(`${history.location.pathname}#entry`);
           setShowReqs(!showReqs);
         }}
       >
-        <span>{requests.total}</span> Requests
+        Invite Contact
       </button>
       <Modal
         activate={bool => {
@@ -27,10 +26,10 @@ const ExperienceModalButton = ({ history }) => {
         }}
         active={showReqs}
       >
-        <RequestList />
+        <NewEntry experience={experience} />
       </Modal>
     </>
   );
 };
 
-export default withRouter(ExperienceModalButton);
+export default withRouter(EntryModalButton);

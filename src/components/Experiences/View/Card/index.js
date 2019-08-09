@@ -12,12 +12,13 @@ const Card = ({ sort, experience, expanded = false }) => {
   const toggleCard = () => {
     setCardSize(!cardSize);
   };
+  const removeTags = str => (str ? str.replace(/<\/?[^>]+(>|$)/g, "") : "");
 
   return (
     <CSSTransition
       key={experience.Id}
       in={experience.display}
-      timeout={300}
+      timeout={500}
       classNames="cardanim"
       unmountOnExit
     >
@@ -31,12 +32,21 @@ const Card = ({ sort, experience, expanded = false }) => {
                 1} large-order-${Math.floor(sort / 3) + 1} cell exp-card close`
         }
       >
+        <div
+          className={
+            experience.Start_Date__c
+              ? "exp-card-stamp active"
+              : "exp-card-stamp"
+          }
+        >
+          Limited Dates
+        </div>
         <button
           type="button"
           onClick={toggleCard}
           className={cardSize ? "exp-card-toggle close" : "exp-card-toggle"}
         >
-          <div className="exp-card-plus" />
+          <div className="exp-plus" />
         </button>
         <div
           className="exp-card-hero"
@@ -44,43 +54,60 @@ const Card = ({ sort, experience, expanded = false }) => {
             backgroundImage: `url(${
               experience.Image_URL__c
                 ? experience.Image_URL__c
-                : "/img/davisestates3.jpg"
+                : "/img/default.jpg"
             })`
           }}
         >
           <img
-            src={getIcon(experience.Experience_Type__c)}
-            data-type={experience.Experience_Type__c}
+            src={getIcon(experience.Experience_Type2__r)}
+            data-type={experience.Experience_Type2__r.Short_Name__c}
             alt="Experience type icon"
           />
         </div>
         <div className="grid-x grid-margin-x grid-margin-y exp-card-main">
           <div className={cardSize ? "medium-6 cell" : "medium-12 cell"}>
             <div className="exp-card-title">
-              <h2>{experience.Strategic_Partner__r.Account__r.Name}</h2>
+              <h2>{experience.Strategic_Partner__r.Name}</h2>
               <h3>{experience.Name}</h3>
             </div>
+
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="info"
+              className="exp-card-request fancy"
             >
-              Create Request
+              Request This Experience
             </button>
+
             <Modal
-              active={modalOpen}
               activate={bool => {
                 setModalOpen(typeof bool === "boolean" ? bool : !modalOpen);
               }}
+              active={modalOpen}
             >
-              {console.log(experience)}
+              {/* TODO: (Isaac) Might need a short description in the Experience object to pass to the request or the request description is ancilliary info for the request input by the salesperson */}
               <SingleRequest
                 initialValues={{
                   Experience__c: experience.Id,
-                  Strategic_Partner_Name__c: experience.Strategic_Partner__c
+                  Requirements__c: removeTags(
+                    experience.Partnership_Details_Requirements__c
+                  ),
+                  Strategic_Partner_Name__c: experience.Strategic_Partner__c,
+                  Event_Date__c: experience.Start_Date__c
+                    ? experience.Start_Date__c
+                    : Date.now()
                 }}
+                ExperienceName={experience.Name}
+                StrategicPartnerName={experience.Strategic_Partner__r.Name}
+                onSuccess={() => setModalOpen(false)}
               />
             </Modal>
+
+            <div
+              className="exp-card-content"
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{ __html: experience.Info__c }}
+            />
           </div>
           <div className={cardSize ? "medium-6 cell" : "medium-12 cell"}>
             <div className="exp-card-keepinmind">
@@ -115,3 +142,32 @@ Card.propTypes = {
 };
 
 export default Card;
+
+/*
+
+ {cardSize && (
+  <div>
+    <button
+      type="button"
+      onClick={() => setModalOpen(true)}
+      className="info"
+    >
+      Create Request
+    </button>
+    <Modal
+      active={modalOpen}
+      activate={bool => {
+        setModalOpen(typeof bool === "boolean" ? bool : !modalOpen);
+      }}
+    >
+      <SingleRequest
+        initialValues={{
+          Experience__c: experience.Id,
+          Strategic_Partner_Name__c: experience.Strategic_Partner__c
+        }}
+      />
+    </Modal>
+  </div>
+)}
+
+*/
