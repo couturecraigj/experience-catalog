@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useContext } from "react";
-import moment from "moment";
 import DataService from "forcejs/dist/force.data-service";
 import loadedQuery from "../../../routes/Home/loadedQuery";
 import Context from "../../Context";
@@ -38,8 +37,6 @@ const SingleRequestCreate = ({
         Requester__c: user.Id,
         Description__c: "",
         Event_Date__c: initialValues.Event_Date__c
-          ? moment(initialValues.Event_Date__c).format("YYYY-MM-DD")
-          : ""
       }}
     >
       <label htmlFor="requester">Requester</label>
@@ -81,11 +78,9 @@ const SingleRequestCreate = ({
       />
       <OpportunityTypeAhead />
       <SingleDatePickerWrapper
+        required
         name="Event_Date__c"
         label="Event Date"
-        value={
-          initialValues.Event_Date__c ? moment(initialValues.Event_Date__c) : ""
-        }
         placeholder="date of requested event"
       />
       {/*

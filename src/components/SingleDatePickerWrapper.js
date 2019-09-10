@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { useState, useEffect, useContext } from "react";
 import { SingleDatePicker } from "react-dates";
+import moment from "moment";
 import FormContext from "./Form/Context";
 import AdditionalFieldsContext from "./AdditionalFields/Context";
 
@@ -12,12 +13,12 @@ const SingleDatePickerWrapper = ({
   name,
   label,
   placeholder,
+  required,
   validate = () => {},
   className,
   value
 }) => {
   const [focused, setFocused] = useState(false);
-  const [date, setDate] = useState(value);
 
   // eslint-disable-next-line no-unused-vars
   let [
@@ -36,12 +37,17 @@ const SingleDatePickerWrapper = ({
     [context, dispatchLocal] = useContext(FormContext);
     // eslint-disable-next-line no-empty
   } catch (error) {}
+  const { initialValues } = context;
+  const initialValue = initialValues[name];
+  console.log(context);
   try {
     [addedFieldsContext, addedFieldsDispatch] = useContext(
       AdditionalFieldsContext
     );
     // eslint-disable-next-line no-empty
   } catch (error) {}
+  const [date, setDate] = useState(initialValue ? moment(initialValue) : null);
+  console.log(date);
   useEffect(() => {
     dispatchLocal({ type: "FIELD/insert", payload: { name, label } });
     dispatch({ type: "FIELD/insert", payload: { name, label } });
@@ -76,13 +82,13 @@ const SingleDatePickerWrapper = ({
     <div className={className}>
       <label htmlFor={name}>{label}</label>
       <SingleDatePicker
+        required={required}
         numberOfMonths={1}
         openDirection="up"
         id={name}
         placeholder={placeholder}
         date={date}
         focused={focused}
-        required
         onDateChange={d => {
           setDate(d);
           dispatchLocal({
