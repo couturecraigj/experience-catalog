@@ -6,6 +6,7 @@
   "dependencies": {
     "@trendmicro/react-sidenav": "^0.4.5",
     "color": "^3.1.2",
+    "gulp": "^4.0.2",
     "jsforce": "https://github.com/couturecraigj/jsforce.git",
     "jsforce-ajax-proxy": "^1.0.0",
     "prop-types": "^15.7.2",
@@ -20,7 +21,8 @@
   "scripts": {
     "start:server": "node src/server",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run gulp",
+    "gulp": "gulp",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint:css": "stylelint ./src/**/*.{js,css,scss}"
